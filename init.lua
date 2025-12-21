@@ -1,27 +1,54 @@
 require "config.config"
 require "config.lazy"
 
-vim.keymap.set("n", "<leader>rr", function()
+local keymap = vim.keymap
+
+-- Reload!
+keymap.set("n", "<leader>rr", function()
   vim.cmd("source $MYVIMRC")
   print("Config reloaded")
 end, { desc = "[R]eload vim config" })
 
+-- Zig-specific fun
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "zig",
   callback = function(ev)
     vim.opt_local.makeprg = "zig build"
-    vim.keymap.set("n", "<leader>zb", function()
+    keymap.set("n", "<leader>zb", function()
       vim.cmd("split | term zig build")
     end, { buffer = ev.buf, desc = "[Z]ig [B]uild" })
-    vim.keymap.set("n", "<leader>zw", function()
+    keymap.set("n", "<leader>zw", function()
       vim.cmd("vsplit | term zig build --watch --prominent-compile-errors")
     end, { buffer = ev.buf, desc = "[Z]ig [W]atch" })
-    vim.keymap.set("n", "<leader>zr", function()
+    keymap.set("n", "<leader>zr", function()
       vim.cmd("split | term zig build run")
     end, { buffer = ev.buf, desc = "[Z]ig [R]un" })
   end
 })
 
-vim.keymap.set("n", "<leader>/", function()
+-- Highlight management
+keymap.set("n", "<leader>/", function()
   vim.cmd('nohlsearch')
 end, { desc = "Disable highlights" })
+
+-- Configure autoformat
+vim.g.autoformat_enabled = true
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.zig", "*.rs" },
+  callback = function()
+    if vim.g.autoformat_enabled then
+      vim.lsp.buf.format({ async = false })
+    end
+  end,
+})
+
+keymap.set("n", "<leader>af", function()
+  vim.lsp.buf.format({ async = true })
+end, { desc = "Auto-format Buffer" })
+
+keymap.set("n", "<leader>at", function()
+  vim.g.autoformat_enabled = not vim.g.autoformat_enabled
+  local status = vim.g.autoformat_enabled and "Enabled" or "Disabled"
+  print("Auto-format " .. status)
+end, { desc = "Toggle Auto-format" })
