@@ -8,4 +8,7 @@ opt.expandtab = true
 opt.number = true
 opt.relativenumber = true
 opt.signcolumn = "number"
+opt.splitright = true
+opt.splitbelow = true
+opt.shellpipe = ">%s 2>&1"
 

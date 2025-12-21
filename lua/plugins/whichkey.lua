@@ -10,6 +10,9 @@ return {
     wk.setup(opts)
     wk.add({
       { '<leader>f', group = 'file' },
+      { '<leader>y', group = 'yank textobjects' },
+      { '<leader>r', group = 'reload' },
+      { '<leader>a', group = 'autoformat' },
     })
   end
 }
