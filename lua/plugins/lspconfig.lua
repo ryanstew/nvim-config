@@ -6,6 +6,7 @@ return {
       enable_build_on_save = true,
     })
     vim.lsp.enable('zls')
+    vim.lsp.enable('rust_analyzer')
 
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function(args)
