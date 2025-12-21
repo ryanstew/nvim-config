@@ -31,5 +31,27 @@ return {
       end,
       desc = "Find open buffer",
     },
+    {
+      '<leader>o',
+      function()
+        require("telescope.builtin").jumplist()
+      end,
+      desc = "Jump list"
+    },
+    {
+      '<leader>:',
+      function()
+        require("telescope.builtin").command_history()
+      end,
+      desc = "Command history"
+    },
+    {
+      'gs',
+      function()
+        require("telescope.builtin").lsp_document_symbols()
+      end,
+      desc = "Document symbol list"
+    },
   }
 }
+
