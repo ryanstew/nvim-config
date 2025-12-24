@@ -21,7 +21,23 @@ vim.api.nvim_create_autocmd("FileType", {
       vim.cmd("vsplit | term zig build --watch --prominent-compile-errors")
     end, { buffer = ev.buf, desc = "[Z]ig [W]atch" })
     keymap.set("n", "<leader>zr", function()
-      vim.cmd("split | term zig build run")
+      vim.cmd("split")
+      local win = vim.api.nvim_get_current_win()
+      local buf = vim.api.nvim_create_buf(false, true)
+      vim.api.nvim_win_set_buf(win, buf)
+
+      vim.fn.termopen("zig build run", {
+        on_exit = function(_, exit_code, _)
+          if exit_code == 0 then
+            if vim.api.nvim_win_is_valid(win) then
+              vim.api.nvim_win_close(win, true)
+              print("Zig Run: Success")
+            end
+          else
+            print("Zig Run: Failed (Exit Code " .. exit_code .. ")")
+          end
+        end
+      })
     end, { buffer = ev.buf, desc = "[Z]ig [R]un" })
   end
 })
