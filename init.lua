@@ -1,5 +1,6 @@
 require "config.config"
 require "config.lazy"
+require "config.hex"
 
 local keymap = vim.keymap
 
@@ -68,3 +69,4 @@ keymap.set("n", "<leader>at", function()
   local status = vim.g.autoformat_enabled and "Enabled" or "Disabled"
   print("Auto-format " .. status)
 end, { desc = "Toggle Auto-format" })
+
