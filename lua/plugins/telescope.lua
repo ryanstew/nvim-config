@@ -52,6 +52,13 @@ return {
       end,
       desc = "Document symbol list"
     },
+    {
+      'gS',
+      function()
+        require("telescope.builtin").lsp_workspace_symbols()
+      end,
+      desc = "Document symbol list"
+    },
   }
 }
 
