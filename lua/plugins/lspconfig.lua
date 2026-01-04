@@ -5,8 +5,11 @@ return {
       semantic_tokens = 'partial',
       enable_build_on_save = true,
     })
+
     vim.lsp.enable('zls')
     vim.lsp.enable('rust_analyzer')
+    vim.lsp.enable('jedi_language_server')
+    vim.lsp.enable('c3_lsp')
 
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function(args)

@@ -5,7 +5,13 @@ return {
     branch = "main",
     build = ':TSUpdate',
     config = function()
-      require('nvim-treesitter').install({'rust', 'zig', 'lua'})
+      ts = require('nvim-treesitter')
+      ts.install({'rust', 'zig', 'lua', 'c3'})
+
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = { 'rust', 'zig', 'lua', 'c3' },
+        callback = function() vim.treesitter.start() end,
+      })
     end,
   },
   {
