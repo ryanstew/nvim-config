@@ -65,7 +65,7 @@ return {
         end, { desc = "Go to next " .. object })
 
         vim.keymap.set({ "n", "x", "o" }, "[" .. key, function()
-          ts_move.goto_next_start(object .. ".outer", "textobjects")
+          ts_move.goto_previous_start(object .. ".outer", "textobjects")
         end, { desc = "Go to previous " .. object })
       end
     end,
