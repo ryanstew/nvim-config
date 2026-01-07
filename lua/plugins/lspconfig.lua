@@ -11,6 +11,16 @@ return {
     vim.lsp.enable('jedi_language_server')
     vim.lsp.enable('c3_lsp')
 
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'koto',
+      callback = function()
+        vim.lsp.start({
+          cmd = { "koto-ls" },
+          root_dir = vim.fn.getcwd(),
+        })
+      end,
+    })
+
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function(args)
         local opts = { buffer = args.buf }
