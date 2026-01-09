@@ -2,6 +2,7 @@ require "config.config"
 require "config.lazy"
 require "config.dx"
 require "config.hex"
+require "config.jj"
 
 local keymap = vim.keymap
 
@@ -10,6 +11,26 @@ keymap.set("n", "<leader>rr", function()
   vim.cmd("source $MYVIMRC")
   print("Config reloaded")
 end, { desc = "[R]eload vim config" })
+
+-- Project-specific helper
+function RunTermAutoclose(command, pause_on_error)
+    local win = vim.api.nvim_get_current_win()
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_win_set_buf(win, buf)
+
+    vim.fn.termopen(command, {
+      on_exit = function(_, exit_code, _)
+        if exit_code == 0 then
+          if vim.api.nvim_win_is_valid(win) or not pause_on_error then
+            vim.api.nvim_win_close(win, true)
+            print("Success")
+          end
+        else
+          print("Failed (Exit Code " .. exit_code .. ")")
+        end
+      end
+    })
+end
 
 -- Zig-specific fun
 vim.api.nvim_create_autocmd("FileType", {
@@ -23,23 +44,8 @@ vim.api.nvim_create_autocmd("FileType", {
       vim.cmd("vsplit | term zig build --watch --prominent-compile-errors")
     end, { buffer = ev.buf, desc = "[Z]ig [W]atch" })
     keymap.set("n", "<leader>zr", function()
-      vim.cmd("split")
-      local win = vim.api.nvim_get_current_win()
-      local buf = vim.api.nvim_create_buf(false, true)
-      vim.api.nvim_win_set_buf(win, buf)
-
-      vim.fn.termopen("zig build run", {
-        on_exit = function(_, exit_code, _)
-          if exit_code == 0 then
-            if vim.api.nvim_win_is_valid(win) then
-              vim.api.nvim_win_close(win, true)
-              print("Zig Run: Success")
-            end
-          else
-            print("Zig Run: Failed (Exit Code " .. exit_code .. ")")
-          end
-        end
-      })
+      vim.cmd("10split")
+      RunTermAutoclose("zig build run", true)
     end, { buffer = ev.buf, desc = "[Z]ig [R]un" })
   end
 })

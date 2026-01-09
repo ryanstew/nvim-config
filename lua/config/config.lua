@@ -13,11 +13,19 @@ opt.splitbelow = true
 opt.shellpipe = ">%s 2>&1"
 opt.textwidth = 100
 opt.colorcolumn = "100"
+opt.exrc = true
 
 vim.filetype.add({
   extension = {
     koto = 'koto',
   },
+})
+
+vim.keymap.set('t', "<Esc><Esc>", [[<C-\><C-n>]])
+vim.api.nvim_create_autocmd("TermOpen", {
+  callback = function()
+    vim.api.nvim_buf_set_keymap(0, 'n', 'qq', [[:bdelete<CR>]], { desc = "close terminal" })
+  end
 })
 
 vim.api.nvim_create_autocmd("FileType", {
