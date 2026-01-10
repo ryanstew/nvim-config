@@ -3,6 +3,7 @@ require "config.lazy"
 require "config.dx"
 require "config.hex"
 require "config.jj"
+require "config.zig"
 
 local keymap = vim.keymap
 
@@ -31,24 +32,6 @@ function RunTermAutoclose(command, pause_on_error)
       end
     })
 end
-
--- Zig-specific fun
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "zig",
-  callback = function(ev)
-    vim.opt_local.makeprg = "zig build"
-    keymap.set("n", "<leader>zb", function()
-      vim.cmd("split | term zig build")
-    end, { buffer = ev.buf, desc = "[Z]ig [B]uild" })
-    keymap.set("n", "<leader>zw", function()
-      vim.cmd("vsplit | term zig build --watch --prominent-compile-errors")
-    end, { buffer = ev.buf, desc = "[Z]ig [W]atch" })
-    keymap.set("n", "<leader>zr", function()
-      vim.cmd("10split")
-      RunTermAutoclose("zig build run", true)
-    end, { buffer = ev.buf, desc = "[Z]ig [R]un" })
-  end
-})
 
 -- Highlight management
 keymap.set("n", "<leader>/", function()

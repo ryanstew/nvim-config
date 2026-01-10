@@ -6,10 +6,10 @@ return {
     build = ':TSUpdate',
     config = function()
       ts = require('nvim-treesitter')
-      ts.install({'rust', 'zig', 'lua', 'c3', 'koto'})
+      ts.install({'rust', 'zig', 'lua', 'c3', 'koto', 'markdown', 'markdown_inline'})
 
       vim.api.nvim_create_autocmd('FileType', {
-        pattern = { 'rust', 'zig', 'lua', 'c3', 'koto' },
+        pattern = { 'rust', 'zig', 'lua', 'c3', 'koto', 'markdown', 'markdown_inline' },
         callback = function() vim.treesitter.start() end,
       })
     end,
