@@ -30,6 +30,41 @@ local be_brief = [[
   ```
 ]]
 
+local function api_key_command(key_name)
+  if vim.fn.executable("rbw") == 1 then
+    return {"rbw", "get", key_name}
+  elseif vim.fn.executable("bw") == 1 then
+    return {"bw", "get", "password", key_name, "--raw"}
+  else
+    vim.notify("no api key command available")
+  end
+end
+
+local api_key_cache = {}
+local function get_cached_api_key(key_name)
+  if api_key_cache[key_name] then
+    return api_key_cache[key_name]
+  end
+
+  vim.notify("Fetching key...")
+  local cmd = api_key_command(key_name)
+  local result = vim.system(cmd, {text = true}):wait()
+  if result.code == 0 then
+    local key = result.stdout:gsub("%s+", "")
+    api_key_cache[key_name] = key
+    return key
+  else
+    vim.notify("Error fetching key: " .. result.code)
+    return nil
+  end
+end
+
+local function api_key_for(key_name)
+  return function()
+    return get_cached_api_key(key_name)
+  end
+end
+
 local codecompanion = {
   'olimorris/codecompanion.nvim',
   dependencies = {
@@ -48,7 +83,7 @@ local codecompanion = {
         gemini = function()
           return require("codecompanion.adapters").extend("gemini", {
             env = {
-              api_key = "cmd:rbw get api-key-gemini"
+              api_key = api_key_for("api-key-gemini"),
             },
             schema = { model = { default = "gemini-3-flash-preview" } },
           })
@@ -57,7 +92,7 @@ local codecompanion = {
           return require("codecompanion.adapters").extend("openai_compatible", {
             env = {
               url = "https://api.groq.com/openai/v1",
-              api_key = "cmd:rbw get api-key-groq",
+              api_key = api_key_for("api-key-groq"),
               chat_url = "/chat/completions",
             },
             schema = {
@@ -75,7 +110,7 @@ local codecompanion = {
           return require("codecompanion.adapters").extend("openai_compatible", {
             env = {
               url = "https://openrouter.ai/api/v1",
-              api_key = "cmd:rbw get api-key-openrouter",
+              api_key = api_key_for("api-key-openrouter"),
               chat_url = "/chat/completions",
             },
             schema = {
