@@ -36,3 +36,5 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_user_command("VaultUnlock", require('secrets').unlock, {})
+
