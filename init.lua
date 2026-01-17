@@ -1,6 +1,7 @@
 require "config.config"
 require "config.lazy"
 
+require "config.beancount"
 require "config.dx"
 require "config.hex"
 require "config.jj"
