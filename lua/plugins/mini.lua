@@ -21,5 +21,10 @@ return {
         MiniFiles.open()
       end, { desc = "Mini Files" })
     end,
-  }
+  },
+  {
+    'nvim-mini/mini.pick',
+    version = '*',
+    opts = {},
+  },
 }
