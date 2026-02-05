@@ -10,6 +10,7 @@ return {
       vim.lsp.enable('zls')
       vim.lsp.enable('rust_analyzer')
       vim.lsp.enable('c3_lsp')
+      vim.lsp.enable('nixd')
 
       vim.api.nvim_create_autocmd('FileType', {
         pattern = 'koto',

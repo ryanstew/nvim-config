@@ -2,7 +2,8 @@ local opt = vim.opt
 local keymap = vim.keymap
 
 opt.tabstop = 2
-opt.smartindent = true
+opt.cindent = true
+opt.autoindent = true
 opt.shiftwidth = 2
 opt.expandtab = true
 opt.number = true
